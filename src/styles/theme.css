@@ -1,0 +1,22 @@
+:root {
+  --color-bg: 255 255 255;
+  --color-bg-elevated: 245 245 245;
+  --color-border: 220 220 220;
+  --color-text: 20 20 20;
+  --color-text-muted: 100 100 100;
+  --color-accent: 59 130 246;
+  --color-accent-foreground: 255 255 255;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+}
+
+.dark {
+  --color-bg: 15 15 17;
+  --color-bg-elevated: 24 24 27;
+  --color-border: 45 45 50;
+  --color-text: 235 235 235;
+  --color-text-muted: 160 160 165;
+  --color-accent: 96 165 250;
+  --color-accent-foreground: 10 10 10;
+}
