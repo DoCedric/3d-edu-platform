@@ -1,5 +1,11 @@
 import { ReactNode } from "react";
 
+/**
+ * Page-level structural shell: divides the screen into two fixed panes.
+ * For an interactive side-by-side/slider/toggle comparison *widget* with its
+ * own controls (usable anywhere, not just as a full-page layout), use
+ * `ComparisonFramework` from `@/components/comparison` instead.
+ */
 interface ComparisonLayoutProps {
   left: ReactNode;
   right: ReactNode;
