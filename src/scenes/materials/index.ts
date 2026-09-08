@@ -11,4 +11,8 @@ export const materialsScenePlugin: ScenePlugin = {
     { id: "metalness", type: "slider", label: "Metalness", min: 0, max: 1, step: 0.01, defaultValue: 0.6 },
     { id: "roughness", type: "slider", label: "Roughness", min: 0, max: 1, step: 0.01, defaultValue: 0.25 },
   ],
+  annotations: [
+    { id: "reflection-highlight", label: "Reflection highlight", position: [0.4, 1.15, 0.4] },
+    { id: "base-color", label: "Base color", position: [1.1, -0.3, 0.4] },
+  ],
 };

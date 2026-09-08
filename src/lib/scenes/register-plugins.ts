@@ -2,6 +2,8 @@ import { registerScenePlugin } from "./registry";
 import { emptyScenePlugin } from "@/scenes/empty";
 import { basicLightingScenePlugin } from "@/scenes/basic-lighting";
 import { materialsScenePlugin } from "@/scenes/materials";
+import { basicCameraScenePlugin } from "@/scenes/camera";
+import { comparisonScenePlugin } from "@/scenes/comparison";
 
 let registered = false;
 
@@ -10,5 +12,7 @@ export function ensurePluginsRegistered() {
   registerScenePlugin(emptyScenePlugin);
   registerScenePlugin(basicLightingScenePlugin);
   registerScenePlugin(materialsScenePlugin);
+  registerScenePlugin(basicCameraScenePlugin);
+  registerScenePlugin(comparisonScenePlugin);
   registered = true;
 }
