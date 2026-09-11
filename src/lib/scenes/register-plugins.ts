@@ -4,6 +4,7 @@ import { basicLightingScenePlugin } from "@/scenes/basic-lighting";
 import { materialsScenePlugin } from "@/scenes/materials";
 import { basicCameraScenePlugin } from "@/scenes/camera";
 import { comparisonScenePlugin } from "@/scenes/comparison";
+import { movingInSpaceScenePlugin } from "@/scenes/moving-in-space";
 
 let registered = false;
 
@@ -14,5 +15,6 @@ export function ensurePluginsRegistered() {
   registerScenePlugin(materialsScenePlugin);
   registerScenePlugin(basicCameraScenePlugin);
   registerScenePlugin(comparisonScenePlugin);
+  registerScenePlugin(movingInSpaceScenePlugin);
   registered = true;
 }

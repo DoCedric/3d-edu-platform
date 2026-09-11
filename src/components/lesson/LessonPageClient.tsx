@@ -44,7 +44,7 @@ export function LessonPageClient({
   nextLesson,
 }: LessonPageClientProps) {
   const [ready, setReady] = useState(false);
-  const { markViewed } = useProgress(moduleSlug, lessonSlug);
+  const { markViewed, setCompleted } = useProgress(moduleSlug, lessonSlug);
 
   useEffect(() => {
     ensurePluginsRegistered();
@@ -60,6 +60,17 @@ export function LessonPageClient({
   const SceneComponent = plugin?.component;
   const { values, setValue } = useControlValues(plugin?.controls);
   const { selectedId, hoveredId, focusToken, select, hover } = useAnnotationSelection(plugin?.id);
+
+  // Generic bridge for "button" controls: a click pushes a fresh signal value
+  // into controlValues, which any scene can watch for (e.g. to reset itself).
+  const handleButtonPress = (id: string) => setValue(id, Date.now());
+
+  // Generic bridge for scene-originated events: a scene reports a "solved"
+  // event (via its onControlEvent prop) when it decides a challenge is
+  // complete, without this component knowing what the challenge was.
+  const handleSceneControlEvent = (id: string) => {
+    if (id === "solved") setCompleted(true);
+  };
 
   if (!ready) return null;
 
@@ -100,6 +111,7 @@ export function LessonPageClient({
           <div className="flex w-full h-full">
             <div className="flex-1 relative min-w-0">
               <Viewport
+                cameraPosition={plugin.cameraPosition}
                 annotations={plugin.annotations}
                 selectedAnnotationId={selectedId}
                 hoveredAnnotationId={hoveredId}
@@ -107,7 +119,7 @@ export function LessonPageClient({
                 onAnnotationSelect={select}
                 onAnnotationHover={hover}
               >
-                <SceneComponent controlValues={values} />
+                <SceneComponent controlValues={values} onControlEvent={handleSceneControlEvent} />
               </Viewport>
             </div>
             {(hasAnnotations || hasControls) && (
@@ -122,7 +134,12 @@ export function LessonPageClient({
                   />
                 )}
                 {hasControls && plugin.controls && (
-                  <ControlsPanel controls={plugin.controls} values={values} onChange={setValue} />
+                  <ControlsPanel
+                    controls={plugin.controls}
+                    values={values}
+                    onChange={setValue}
+                    onButtonPress={handleButtonPress}
+                  />
                 )}
               </div>
             )}

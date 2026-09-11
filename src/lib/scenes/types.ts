@@ -23,4 +23,7 @@ export interface ScenePlugin {
   component: ComponentType<{ controlValues?: SceneControlValues; onControlEvent?: (id: string) => void }>;
   controls?: SceneControlSchema[];
   annotations?: SceneAnnotationSchema[];
+  /** Optional preferred initial camera position, for scenes whose spatial
+   * extent doesn't suit the Viewport's default framing. */
+  cameraPosition?: [number, number, number];
 }
