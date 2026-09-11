@@ -38,7 +38,6 @@ export function CoordinatePointScene({ onPositionChange }: CoordinatePointSceneP
   return (
     <>
       <AxisGizmo length={5} />
-      <gridHelper args={[10, 10, "#44444a", "#2a2a2e"]} />
 
       <mesh position={ORIGIN}>
         <sphereGeometry args={[0.12, 16, 16]} />
