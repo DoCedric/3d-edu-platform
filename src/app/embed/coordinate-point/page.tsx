@@ -39,7 +39,7 @@ export default function CoordinatePointEmbedPage() {
           </div>
         )}
         <div className="mt-2 text-xs leading-snug text-text-muted">
-          Drag the sphere — its coordinates snap to whole numbers. Rotate the view, then drag again, to move it toward or away from the camera.
+          Drag an arrow on the gizmo to move the point along that axis — coordinates snap to whole numbers.
         </div>
       </div>
     </div>
