@@ -100,7 +100,7 @@ function UvInspectorPanel({ uvs, onVertexDrag, hoverBary, onHoverBary }: UvInspe
   return (
     <div className="flex h-full w-1/2 items-center justify-center p-6">
       <div
-        className="relative aspect-square h-full max-h-[560px] w-full max-w-[560px] touch-none overflow-hidden rounded-md border border-border"
+        className="relative aspect-square h-full max-h-[560px] w-auto max-w-[min(100%,560px)] touch-none overflow-hidden rounded-md border border-border"
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
         onPointerDown={handlePointerDown}
