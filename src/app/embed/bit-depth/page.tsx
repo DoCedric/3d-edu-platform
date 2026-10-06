@@ -20,6 +20,10 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
+function centeredOffset(containerWidth: number, containerHeight: number, scale: number) {
+  return { x: (containerWidth - wazowski.width * scale) / 2, y: (containerHeight - wazowski.height * scale) / 2 };
+}
+
 /** Standalone, chrome-free page meant to be embedded (e.g. as an iframe in a
  * Superhuman doc) rather than navigated to inside the lesson shell. No 3D
  * here - a plain 2D canvas, reprocessed with the 2D canvas API whenever a
@@ -104,7 +108,7 @@ export default function BitDepthEmbedPage() {
     setLastContainerSize(containerSize);
     if (containerSize.width && containerSize.height) {
       setZoom(1);
-      setOffset({ x: (containerSize.width - baseWidth) / 2, y: (containerSize.height - baseHeight) / 2 });
+      setOffset(centeredOffset(containerSize.width, containerSize.height, fitScale));
     }
   }
 
@@ -127,12 +131,19 @@ export default function BitDepthEmbedPage() {
 
       const prevScale = fitScaleRef.current * prevZoom;
       const nextScale = fitScaleRef.current * nextZoom;
-      // Keep the image point under the cursor fixed on screen as zoom changes.
-      const imageX = (cursorX - prevOffset.x) / prevScale;
-      const imageY = (cursorY - prevOffset.y) / prevScale;
 
       setZoom(nextZoom);
-      setOffset({ x: cursorX - imageX * nextScale, y: cursorY - imageY * nextScale });
+      if (nextZoom <= MIN_ZOOM) {
+        // Back at 100%: snap to centered rather than wherever the cursor
+        // happened to be, so zooming all the way back out never leaves the
+        // image sitting off to one side.
+        setOffset(centeredOffset(rect.width, rect.height, fitScaleRef.current));
+      } else {
+        // Keep the image point under the cursor fixed on screen as zoom changes.
+        const imageX = (cursorX - prevOffset.x) / prevScale;
+        const imageY = (cursorY - prevOffset.y) / prevScale;
+        setOffset({ x: cursorX - imageX * nextScale, y: cursorY - imageY * nextScale });
+      }
     };
 
     el.addEventListener("wheel", handleWheel, { passive: false });
@@ -159,20 +170,25 @@ export default function BitDepthEmbedPage() {
   const applyZoom = (nextZoom: number) => {
     const container = containerRef.current;
     if (!container) return;
+    const clamped = clamp(nextZoom, MIN_ZOOM, MAX_ZOOM);
+    setZoom(clamped);
+
+    if (clamped <= MIN_ZOOM) {
+      setOffset(centeredOffset(container.clientWidth, container.clientHeight, fitScale));
+      return;
+    }
     const centerX = container.clientWidth / 2;
     const centerY = container.clientHeight / 2;
     const prevScale = fitScale * zoom;
-    const clamped = clamp(nextZoom, MIN_ZOOM, MAX_ZOOM);
     const nextScale = fitScale * clamped;
     const imageX = (centerX - offset.x) / prevScale;
     const imageY = (centerY - offset.y) / prevScale;
-    setZoom(clamped);
     setOffset({ x: centerX - imageX * nextScale, y: centerY - imageY * nextScale });
   };
 
   const resetView = () => {
     setZoom(1);
-    setOffset({ x: (containerSize.width - baseWidth) / 2, y: (containerSize.height - baseHeight) / 2 });
+    setOffset(centeredOffset(containerSize.width, containerSize.height, fitScale));
   };
 
   const levelCount = 2 ** bitDepth;
