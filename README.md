@@ -1,4 +1,17 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 3D Edu Platform
+
+Interactive 3D and graphics demos for teaching first-year 3D students. Every demo is a standalone page under `/embed/<slug>` that can be embedded in an iframe; the home page is a gallery of all of them.
+
+- Live site: https://3d-edu-platform.vercel.app/
+- Demo list, links, and the embed snippet: [DEMOS.md](DEMOS.md)
+
+### Project layout
+
+- `src/app/embed/<slug>/page.tsx` - the embeddable page for each demo (UI and controls).
+- `src/scenes/<slug>/` - the demo's rendering and simulation code.
+- `src/lib/demos.ts` - the list of demos shown in the gallery. Keep [DEMOS.md](DEMOS.md) in sync with it.
+
+Built with [Next.js](https://nextjs.org), bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 

@@ -54,4 +54,9 @@ export const DEMOS: DemoInfo[] = [
     title: "PBR Material Playground",
     description: "Adjust a physically-based material's color, roughness, metalness, clearcoat, and transmission in real time.",
   },
+  {
+    slug: "path-tracing",
+    title: "Path Tracing Playground",
+    description: "Watch rays leave a camera, bounce randomly around a 2D room, and average into a clean image - noise, bounces, shadows, and fireflies. Drag the ball and the lamp to move the shadow.",
+  },
 ];
