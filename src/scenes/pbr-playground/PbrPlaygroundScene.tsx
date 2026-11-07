@@ -11,7 +11,6 @@ export interface PbrMaterialValues {
   color: string;
   roughness: number;
   metalness: number;
-  envMapIntensity: number;
   clearcoat: number;
   clearcoatRoughness: number;
   emissive: string;
@@ -62,7 +61,6 @@ export function PbrPlaygroundScene({ values }: PbrPlaygroundSceneProps) {
     // eslint-disable-next-line react-hooks/immutability
     material.roughness = values.roughness;
     material.metalness = values.metalness;
-    material.envMapIntensity = values.envMapIntensity;
     material.clearcoat = values.clearcoat;
     material.clearcoatRoughness = values.clearcoatRoughness;
     material.emissive.set(values.emissive);

@@ -11,7 +11,6 @@ const DEFAULT_VALUES: PbrMaterialValues = {
   color: "#d9d9d9",
   roughness: 0.3,
   metalness: 0,
-  envMapIntensity: 1,
   clearcoat: 0,
   clearcoatRoughness: 0.1,
   emissive: "#000000",
@@ -123,14 +122,6 @@ export default function PbrPlaygroundEmbedPage() {
           <SliderRow label="Metalness" value={values.metalness} min={0} max={1} step={0.01} onChange={(v) => setValue("metalness", v)} />
           <SliderRow label="Roughness" value={values.roughness} min={0} max={1} step={0.01} onChange={(v) => setValue("roughness", v)} />
           <ColorRow label="Color" value={values.color} onChange={(v) => setValue("color", v)} />
-          <SliderRow
-            label="Environment reflection"
-            value={values.envMapIntensity}
-            min={0}
-            max={3}
-            step={0.05}
-            onChange={(v) => setValue("envMapIntensity", v)}
-          />
           <SliderRow label="Clearcoat" value={values.clearcoat} min={0} max={1} step={0.01} onChange={(v) => setValue("clearcoat", v)} />
           <SliderRow
             label="Clearcoat roughness"
