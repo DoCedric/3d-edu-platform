@@ -43,7 +43,7 @@ export const DEFAULT_SETTINGS: Settings = {
   showPaths: true,
   sppTarget: 64,
   pathsPerFrame: 24,
-  playing: true,
+  playing: false,
 };
 
 /** A recently traced path, kept around briefly so it can be drawn fading out. */

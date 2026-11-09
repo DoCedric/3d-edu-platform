@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { DEFAULT_SETTINGS, PathTracingEngine, type Draggable, type Readout, type Settings } from "@/scenes/path-tracing/engine";
 import { CANVAS_HEIGHT, CANVAS_WIDTH, designToWorld, drawFrame, objectAt, pixelAt, type ThemeColors } from "@/scenes/path-tracing/draw";
 import { DEFAULT_PARAMS, LAMP_MAX_RADIUS, LAMP_MIN_RADIUS, type Vec2 } from "@/scenes/path-tracing/pathTracer";
@@ -214,6 +214,24 @@ function Toggle({ label, checked, onChange, shortcut }: { label: string; checked
   );
 }
 
+const subscribeFullscreen = (onChange: () => void) => {
+  document.addEventListener("fullscreenchange", onChange);
+  return () => document.removeEventListener("fullscreenchange", onChange);
+};
+const noopSubscribe = () => () => {};
+
+function FullscreenIcon({ exit }: { exit: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {exit ? (
+        <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
+      ) : (
+        <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+      )}
+    </svg>
+  );
+}
+
 function readTheme(): ThemeColors {
   const css = getComputedStyle(document.documentElement);
   const color = (name: string) => `rgb(${css.getPropertyValue(name).trim().split(/\s+/).join(", ")})`;
@@ -247,6 +265,14 @@ export default function PathTracingEmbedPage() {
   const [readout, setReadout] = useState<Readout>(() => engine.readout());
   const [stepCaption, setStepCaption] = useState<string | null>(null);
   const [story, setStory] = useState<{ index: number; step: number } | null>(null);
+  // Fullscreen is unavailable e.g. inside an iframe without allowfullscreen; hide the button then.
+  const fullscreenEnabled = useSyncExternalStore(noopSubscribe, () => document.fullscreenEnabled, () => false);
+  const isFullscreen = useSyncExternalStore(subscribeFullscreen, () => !!document.fullscreenElement, () => false);
+
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else rootRef.current?.requestFullscreen();
+  }, []);
 
   /** Single entry point for settings changes: the engine applies them (and
    * resets the image if needed) immediately, then React re-renders the UI. */
@@ -368,6 +394,7 @@ export default function PathTracingEmbedPage() {
       else if (key === "r") reset();
       else if (key === "p") update({ showPaths: !engine.settings.showPaths });
       else if (key === "m") update({ mode: engine.settings.mode === "camera" ? "light" : "camera" });
+      else if (key === "f" && document.fullscreenEnabled) toggleFullscreen();
       else if (key === "n" || key === "arrowright") {
         if (key === "arrowright" && event.target instanceof HTMLInputElement) return;
         nextStoryStep();
@@ -384,7 +411,7 @@ export default function PathTracingEmbedPage() {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
     };
-  }, [engine, togglePlay, step, reset, update, nextStoryStep, runStory]);
+  }, [engine, togglePlay, step, reset, update, nextStoryStep, runStory, toggleFullscreen]);
 
   /** Pointer position in the canvas's 800 x 530 design space. */
   const designPoint = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -454,6 +481,12 @@ export default function PathTracingEmbedPage() {
               {s.label}
             </Button>
           ))}
+          {fullscreenEnabled && (
+            <Button onClick={toggleFullscreen} className="ml-auto px-2 py-1.5">
+              <span className="sr-only">{isFullscreen ? "Exit full screen" : "Full screen"}</span>
+              <FullscreenIcon exit={isFullscreen} />
+            </Button>
+          )}
         </div>
 
         <div className="flex min-h-0 flex-1 gap-2">
@@ -573,7 +606,7 @@ export default function PathTracingEmbedPage() {
 
           <div className="mt-auto text-sm leading-relaxed text-text-muted">
             Keys: <span className="font-mono">1-6</span> stories · <span className="font-mono">N</span> next · <span className="font-mono">M</span> switch
-            mode · <span className="font-mono">Esc</span> clear pixel
+            mode · <span className="font-mono">F</span> full screen · <span className="font-mono">Esc</span> clear pixel
           </div>
         </div>
       </div>
