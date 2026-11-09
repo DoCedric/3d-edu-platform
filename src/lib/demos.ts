@@ -59,4 +59,9 @@ export const DEMOS: DemoInfo[] = [
     title: "Path Tracing Playground",
     description: "Watch rays leave a camera, bounce randomly around a 2D room, and average into a clean image - noise, bounces, shadows, and fireflies. Drag the ball and the lamp to move the shadow.",
   },
+  {
+    slug: "raster-pipeline",
+    title: "Rasterization Pipeline",
+    description: "Step through how a game engine renders one frame - vertex shader, culling, rasterization, fragment shader, depth test - with a 3D world view linked to a software rasterizer's coarse pixel grid.",
+  },
 ];

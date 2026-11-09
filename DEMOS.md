@@ -16,6 +16,7 @@ The home page is a gallery of every demo. Each demo is also a standalone page un
 | 8 | Bit Depth & Dithering | https://3d-edu-platform.vercel.app/embed/bit-depth | Reduce an image's bit depth and channel, with optional dithering, then zoom in on the result. |
 | 9 | PBR Material Playground | https://3d-edu-platform.vercel.app/embed/pbr-playground | Adjust a physically-based material's color, roughness, metalness, clearcoat, and transmission in real time. |
 | 10 | Path Tracing Playground | https://3d-edu-platform.vercel.app/embed/path-tracing | Watch rays leave a camera, bounce randomly around a 2D room, and average into a clean image (noise, bounces, shadows, and fireflies). Drag the ball and the lamp to move the shadow. |
+| 11 | Rasterization Pipeline | https://3d-edu-platform.vercel.app/embed/raster-pipeline | Step through how a game engine renders one frame (vertex shader, culling, rasterization, fragment shader, depth test), with a 3D world view linked to a software rasterizer's coarse pixel grid. |
 
 ## Embedding
 

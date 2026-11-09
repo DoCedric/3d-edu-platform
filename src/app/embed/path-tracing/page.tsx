@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { FullscreenIcon, useFullscreen } from "@/components/demo-ui/fullscreen";
 import { DEFAULT_SETTINGS, PathTracingEngine, type Draggable, type Readout, type Settings } from "@/scenes/path-tracing/engine";
 import { CANVAS_HEIGHT, CANVAS_WIDTH, designToWorld, drawFrame, objectAt, pixelAt, type ThemeColors } from "@/scenes/path-tracing/draw";
 import { DEFAULT_PARAMS, LAMP_MAX_RADIUS, LAMP_MIN_RADIUS, type Vec2 } from "@/scenes/path-tracing/pathTracer";
@@ -214,24 +215,6 @@ function Toggle({ label, checked, onChange, shortcut }: { label: string; checked
   );
 }
 
-const subscribeFullscreen = (onChange: () => void) => {
-  document.addEventListener("fullscreenchange", onChange);
-  return () => document.removeEventListener("fullscreenchange", onChange);
-};
-const noopSubscribe = () => () => {};
-
-function FullscreenIcon({ exit }: { exit: boolean }) {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      {exit ? (
-        <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
-      ) : (
-        <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
-      )}
-    </svg>
-  );
-}
-
 function readTheme(): ThemeColors {
   const css = getComputedStyle(document.documentElement);
   const color = (name: string) => `rgb(${css.getPropertyValue(name).trim().split(/\s+/).join(", ")})`;
@@ -265,14 +248,7 @@ export default function PathTracingEmbedPage() {
   const [readout, setReadout] = useState<Readout>(() => engine.readout());
   const [stepCaption, setStepCaption] = useState<string | null>(null);
   const [story, setStory] = useState<{ index: number; step: number } | null>(null);
-  // Fullscreen is unavailable e.g. inside an iframe without allowfullscreen; hide the button then.
-  const fullscreenEnabled = useSyncExternalStore(noopSubscribe, () => document.fullscreenEnabled, () => false);
-  const isFullscreen = useSyncExternalStore(subscribeFullscreen, () => !!document.fullscreenElement, () => false);
-
-  const toggleFullscreen = useCallback(() => {
-    if (document.fullscreenElement) document.exitFullscreen();
-    else rootRef.current?.requestFullscreen();
-  }, []);
+  const { enabled: fullscreenEnabled, active: isFullscreen, toggle: toggleFullscreen } = useFullscreen(rootRef);
 
   /** Single entry point for settings changes: the engine applies them (and
    * resets the image if needed) immediately, then React re-renders the UI. */
