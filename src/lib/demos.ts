@@ -64,4 +64,9 @@ export const DEMOS: DemoInfo[] = [
     title: "Rasterization Pipeline",
     description: "Step through how a game engine renders one frame - vertex shader, culling, rasterization, fragment shader, depth test - with a 3D world view linked to a software rasterizer's coarse pixel grid.",
   },
+  {
+    slug: "supersampling",
+    title: "Supersampling Anti-Aliasing",
+    description: "Rasterize a circle, triangle, or square into a 64 x 64 image, then zoom in on the jagged edges and smooth them with 4, 16, or 64 samples per pixel.",
+  },
 ];
